@@ -1,1 +1,3 @@
-# ugrip-energy
+# Building Energy Storage Simulation
+
+update later
