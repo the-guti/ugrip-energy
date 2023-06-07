@@ -5,3 +5,4 @@ __pycache__
 docs
 test.ipynb
 rl_example
+logs

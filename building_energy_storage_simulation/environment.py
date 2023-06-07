@@ -7,9 +7,9 @@ from building_energy_storage_simulation.simulation import Simulation
 
 class Environment(gym.Env):
     """
-    Wraps the simulation as `gymnasium` environment, so it can be used easily for reinforcement learning.
+    Wraps the simulation as a `gymnasium` environment, so it can be easily used for reinforcement learning.
 
-    :param max_timesteps: The number of steps after which the environment terminates
+    :param max_timesteps: The number of steps after which the environment terminates.
     :type max_timesteps: int
     :param num_forecasting_steps: The number of timesteps into the future included in the forecast. Note that the
        forecast is perfect.
@@ -24,16 +24,21 @@ class Environment(gym.Env):
     """
 
     def __init__(self,
-                 max_timesteps: int = 2000,
-                 num_forecasting_steps: int = 4,
-                 battery_capacity: float = 100,
-                 solar_power_installed: float = 240,  # Solar Gen Profile is in W per 1KW of Solar power installed
-                 max_battery_charge_per_timestep: float = 20,
-                 ):
+                 dataset,
+                 max_timesteps,
+                 num_forecasting_steps,
+                 battery_capacity,
+                 initial_state_of_charge,
+                 solar_power_installed,
+                 max_battery_charge_per_timestep,
+                 sell_back_price_rate):
 
-        self.simulation = Simulation(battery_capacity=battery_capacity,
+        self.simulation = Simulation(dataset=dataset,
+                                     battery_capacity=battery_capacity,
+                                     initial_state_of_charge=initial_state_of_charge,
                                      solar_power_installed=solar_power_installed,
-                                     max_battery_charge_per_timestep=max_battery_charge_per_timestep)
+                                     max_battery_charge_per_timestep=max_battery_charge_per_timestep,
+                                     sell_back_price_rate=sell_back_price_rate)
 
         self.max_battery_charge_per_timestep = max_battery_charge_per_timestep
         self.max_timesteps = max_timesteps
@@ -59,11 +64,11 @@ class Environment(gym.Env):
 
     def reset(self) -> Tuple[ObsType, dict]:
         """
-        Resetting the state of the simulation by calling `reset()` method from the simulation class.
+        Resets the state of the simulation by calling the `reset()` method from the simulation class.
 
         :returns:
             Tuple of:
-                1. An observation
+                1. An observation.
                 2. Empty hashmap: {}
 
         :rtype: (observation, dict)
@@ -74,25 +79,25 @@ class Environment(gym.Env):
 
     def step(self, action: ActType) -> Tuple[ObsType, float, bool, bool, dict]:
         """
-        Perform one step, which is done by:
+        Performs one step, which is done by:
 
-        1. Performing one `simulate_one_step()`
-        2. Calculating the reward
-        3. Retrieving the observation
+        1. Performing one `simulate_one_step()`.
+        2. Calculating the reward.
+        3. Retrieving the observation.
 
         :param action: Fraction of energy to be stored or retrieved from the battery. The action lies in [-1;1]. The
             action represents the fraction of `max_battery_charge_per_timestep` which should be used to charge or
             discharge the battery. 1 represents the maximum possible amount of energy which can be used to charge the
-             battery per time step.
+            battery per time step.
         :type action: float
         :returns:
             Tuple of:
-                1. observation
-                2. reward
+                1. observation.
+                2. reward.
                 3. terminated. If true, the episode is over.
                 4. truncated. Is always false, it is not implemented yet.
                 5. Additional Information about the `electricity_comsumption`, the `excess_energy`, and the 
-                   `cost_of_external_generator` of the current time step
+                   `cost_of_external_generator` of the current time step.
 
         :rtype: (observation, float, bool, bool, dict)
         """

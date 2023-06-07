@@ -15,10 +15,12 @@ class Building:
     """
 
     def __init__(self,
-                 solar_power_installed: float = 240.0,
-                 battery_capacity: float = 100,
-                 max_battery_charge_per_timestep: float = 20):
-        self.battery = Battery(capacity=battery_capacity,
+                 solar_power_installed,
+                 battery_capacity,
+                 initial_state_of_charge,
+                 max_battery_charge_per_timestep):
+        self.battery = Battery(battery_capacity=battery_capacity,
+                               initial_state_of_charge=initial_state_of_charge,
                                max_battery_charge_per_timestep=max_battery_charge_per_timestep)
         self.solar_power_installed = solar_power_installed
         pass
