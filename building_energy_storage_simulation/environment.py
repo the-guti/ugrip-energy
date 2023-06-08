@@ -23,36 +23,43 @@ class Environment(gym.Env):
     :type max_battery_charge_per_timestep: float
     """
 
-    def __init__(self,
-                 dataset,
-                 max_timesteps,
-                 num_forecasting_steps,
-                 battery_capacity,
-                 initial_state_of_charge,
-                 solar_power_installed,
-                 max_battery_charge_per_timestep,
-                 sell_back_price_rate):
+    def __init__(
+        self,
+        dataset,
+        max_timesteps,
+        num_forecasting_steps,
+        battery_capacity,
+        initial_state_of_charge,
+        solar_power_installed,
+        max_battery_charge_per_timestep,
+        sell_back_price_rate,
+    ):
 
-        self.simulation = Simulation(dataset=dataset,
-                                     battery_capacity=battery_capacity,
-                                     initial_state_of_charge=initial_state_of_charge,
-                                     solar_power_installed=solar_power_installed,
-                                     max_battery_charge_per_timestep=max_battery_charge_per_timestep,
-                                     sell_back_price_rate=sell_back_price_rate)
+        self.simulation = Simulation(
+            dataset=dataset,
+            battery_capacity=battery_capacity,
+            initial_state_of_charge=initial_state_of_charge,
+            solar_power_installed=solar_power_installed,
+            max_battery_charge_per_timestep=max_battery_charge_per_timestep,
+            sell_back_price_rate=sell_back_price_rate,
+        )
 
         self.max_battery_charge_per_timestep = max_battery_charge_per_timestep
         self.max_timesteps = max_timesteps
-        assert self.max_timesteps + num_forecasting_steps < len(self.simulation.solar_generation_profile), \
-            "`max_timesteps plus the forecast length cannot be greater than the length of the simulation profile."
+        assert self.max_timesteps + num_forecasting_steps < len(
+            self.simulation.solar_generation_profile
+        ), "`max_timesteps plus the forecast length cannot be greater than the length of the simulation profile."
         self.num_forecasting_steps = num_forecasting_steps
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
         # Using np.inf as bounds as the observations must be rescaled externally anyways. E.g. Using the VecNormalize
         # wrapper from StableBaselines3
         # (see https://stable-baselines.readthedocs.io/en/master/guide/vec_envs.html#vecnormalize)
-        self.observation_space = gym.spaces.Box(shape=(self.num_forecasting_steps * 3 + 1,),
-                                                low=-np.inf,
-                                                high=np.inf,
-                                                dtype=np.float64)
+        self.observation_space = gym.spaces.Box(
+            shape=(self.num_forecasting_steps * 3 + 1,),
+            low=-np.inf,
+            high=np.inf,
+            dtype=np.float64,
+        )
         pass
 
     def render(self) -> Optional[Union[RenderFrame, List[RenderFrame]]]:
@@ -96,7 +103,7 @@ class Environment(gym.Env):
                 2. reward.
                 3. terminated. If true, the episode is over.
                 4. truncated. Is always false, it is not implemented yet.
-                5. Additional Information about the `electricity_comsumption`, the `excess_energy`, and the 
+                5. Additional Information about the `electricity_comsumption`, the `excess_energy`, and the
                    `cost_of_external_generator` of the current time step.
 
         :rtype: (observation, float, bool, bool, dict)
@@ -104,13 +111,29 @@ class Environment(gym.Env):
 
         if hasattr(action, "__len__"):
             action = action[0]
-        electricity_consumption, excess_energy, cost_of_external_generator, revenue_from_excess_energy = self.simulation.simulate_one_step(action *
-                                                                                   self.max_battery_charge_per_timestep)
-        reward = Environment.calc_reward(cost_of_external_generator, revenue_from_excess_energy)
+        (
+            electricity_consumption,
+            excess_energy,
+            cost_of_external_generator,
+            revenue_from_excess_energy,
+        ) = self.simulation.simulate_one_step(
+            action * self.max_battery_charge_per_timestep
+        )
+        reward = Environment.calc_reward(
+            cost_of_external_generator, revenue_from_excess_energy
+        )
         observation = self.get_observation()
-        return observation, reward, self.get_terminated(), False, {'electricity_consumption': electricity_consumption,
-                                                                   'excess_energy': excess_energy,
-                                                                   'cost_of_external_generator': cost_of_external_generator}
+        return (
+            observation,
+            reward,
+            self.get_terminated(),
+            False,
+            {
+                "electricity_consumption": electricity_consumption,
+                "excess_energy": excess_energy,
+                "cost_of_external_generator": cost_of_external_generator,
+            },
+        )
 
     def get_terminated(self):
         if self.simulation.step_count > self.max_timesteps:
@@ -119,17 +142,24 @@ class Environment(gym.Env):
 
     def get_observation(self):
         current_index = self.simulation.start_index + self.simulation.step_count
-        electric_load_forecast = self.simulation.electricity_load_profile[current_index: current_index +
-                                                                                         self.num_forecasting_steps]
-        solar_gen_forecast = self.simulation.solar_generation_profile[current_index: current_index +
-                                                                                     self.num_forecasting_steps]
-        external_gen_cost_forecast = self.simulation.external_generation_profile[current_index: current_index +
-                                                                                         self.num_forecasting_steps]
-        return np.concatenate(([self.simulation.building.battery.state_of_charge],
-                               electric_load_forecast,
-                               solar_gen_forecast,
-                               external_gen_cost_forecast),
-                              axis=0)
+        electric_load_forecast = self.simulation.electricity_load_profile[
+            current_index : current_index + self.num_forecasting_steps
+        ]
+        solar_gen_forecast = self.simulation.solar_generation_profile[
+            current_index : current_index + self.num_forecasting_steps
+        ]
+        external_gen_cost_forecast = self.simulation.external_generation_profile[
+            current_index : current_index + self.num_forecasting_steps
+        ]
+        return np.concatenate(
+            (
+                [self.simulation.building.battery.state_of_charge],
+                electric_load_forecast,
+                solar_gen_forecast,
+                external_gen_cost_forecast,
+            ),
+            axis=0,
+        )
 
     @staticmethod
     def calc_reward(cost_of_external_generator, revenue_from_excess_energy):

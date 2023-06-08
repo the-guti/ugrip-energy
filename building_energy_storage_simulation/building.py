@@ -14,14 +14,18 @@ class Building:
     :type max_battery_charge_per_timestep: float
     """
 
-    def __init__(self,
-                 solar_power_installed,
-                 battery_capacity,
-                 initial_state_of_charge,
-                 max_battery_charge_per_timestep):
-        self.battery = Battery(battery_capacity=battery_capacity,
-                               initial_state_of_charge=initial_state_of_charge,
-                               max_battery_charge_per_timestep=max_battery_charge_per_timestep)
+    def __init__(
+        self,
+        solar_power_installed,
+        battery_capacity,
+        initial_state_of_charge,
+        max_battery_charge_per_timestep,
+    ):
+        self.battery = Battery(
+            battery_capacity=battery_capacity,
+            initial_state_of_charge=initial_state_of_charge,
+            max_battery_charge_per_timestep=max_battery_charge_per_timestep,
+        )
         self.solar_power_installed = solar_power_installed
         pass
 

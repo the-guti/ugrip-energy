@@ -25,26 +25,35 @@ class Simulation:
     :type sell_back_price_rate: float
     """
 
-    def __init__(self,
-                 dataset,
-                 battery_capacity,
-                 initial_state_of_charge,
-                 solar_power_installed,
-                 max_battery_charge_per_timestep,
-                 sell_back_price_rate):
-        self.building = Building(solar_power_installed=solar_power_installed,
-                                 battery_capacity=battery_capacity,
-                                 initial_state_of_charge=initial_state_of_charge,
-                                 max_battery_charge_per_timestep=max_battery_charge_per_timestep)
+    def __init__(
+        self,
+        dataset,
+        battery_capacity,
+        initial_state_of_charge,
+        solar_power_installed,
+        max_battery_charge_per_timestep,
+        sell_back_price_rate,
+    ):
+        self.building = Building(
+            solar_power_installed=solar_power_installed,
+            battery_capacity=battery_capacity,
+            initial_state_of_charge=initial_state_of_charge,
+            max_battery_charge_per_timestep=max_battery_charge_per_timestep,
+        )
 
-        self.electricity_load_profile = load_profile(dataset, 'load')
-        self.solar_generation_profile = load_profile(dataset, 'solar')
-        self.external_generation_profile = load_profile(dataset, 'price')
+        self.electricity_load_profile = load_profile(dataset, "load")
+        self.solar_generation_profile = load_profile(dataset, "solar")
+        self.external_generation_profile = load_profile(dataset, "price")
         self.sell_back_price_rate = sell_back_price_rate
-        assert len(self.solar_generation_profile) == len(self.electricity_load_profile) == len(self.external_generation_profile), \
-            "Solar generation profile, electricity load profile, and external generation profile must be of the same length."
+        assert (
+            len(self.solar_generation_profile)
+            == len(self.electricity_load_profile)
+            == len(self.external_generation_profile)
+        ), "Solar generation profile, electricity load profile, and external generation profile must be of the same length."
         # Solar Generation Profile is in W per 1KW of Solar power installed
-        self.solar_generation_profile = self.solar_generation_profile * self.building.solar_power_installed / 1000
+        self.solar_generation_profile = (
+            self.solar_generation_profile * self.building.solar_power_installed / 1000
+        )
         self.step_count = 0
         self.start_index = 0
         pass
@@ -81,13 +90,22 @@ class Simulation:
 
         :rtype: (float, float, float, float)
         """
-        electricity_load_of_this_timestep = self.electricity_load_profile[self.start_index + self.step_count]
-        solar_generation_of_this_timestep = self.solar_generation_profile[self.start_index + self.step_count]
-        external_generation_cost_of_this_timestep = self.external_generation_profile[self.start_index + self.step_count]
+        electricity_load_of_this_timestep = self.electricity_load_profile[
+            self.start_index + self.step_count
+        ]
+        solar_generation_of_this_timestep = self.solar_generation_profile[
+            self.start_index + self.step_count
+        ]
+        external_generation_cost_of_this_timestep = self.external_generation_profile[
+            self.start_index + self.step_count
+        ]
 
         electricity_consumed_for_battery = self.building.battery.use(amount)
-        electricity_consumption = electricity_consumed_for_battery + electricity_load_of_this_timestep - \
-                                  solar_generation_of_this_timestep
+        electricity_consumption = (
+            electricity_consumed_for_battery
+            + electricity_load_of_this_timestep
+            - solar_generation_of_this_timestep
+        )
         excess_energy = 0
         external_generator_energy = 0
         cost_of_external_generator = 0
@@ -95,9 +113,20 @@ class Simulation:
         if electricity_consumption < 0:
             excess_energy = -1 * electricity_consumption
             electricity_consumption = 0
-            revenue_from_excess_energy = excess_energy * external_generation_cost_of_this_timestep * self.sell_back_price_rate
+            revenue_from_excess_energy = (
+                excess_energy
+                * external_generation_cost_of_this_timestep
+                * self.sell_back_price_rate
+            )
         else:
             external_generator_energy = electricity_consumption
-            cost_of_external_generator = external_generation_cost_of_this_timestep * external_generator_energy
+            cost_of_external_generator = (
+                external_generation_cost_of_this_timestep * external_generator_energy
+            )
         self.step_count += 1
-        return electricity_consumption, excess_energy, cost_of_external_generator, revenue_from_excess_energy
+        return (
+            electricity_consumption,
+            excess_energy,
+            cost_of_external_generator,
+            revenue_from_excess_energy,
+        )

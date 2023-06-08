@@ -43,6 +43,8 @@ env = VecNormalize(env, norm_obs=True, norm_reward=True)
 # Initialize the model based on the chosen algorithm
 if args.algorithm == "ppo":
     model = PPO("MlpPolicy", env, **algorithm_config["model"])
+if args.algorithm == "ddpg":
+    model = DDPG("MlpPolicy", env, **algorithm_config["model"])
 
 # Train the model
 model.learn(**algorithm_config["learn"])

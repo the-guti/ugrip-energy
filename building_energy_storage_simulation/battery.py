@@ -11,10 +11,9 @@ class Battery:
     :type max_battery_charge_per_timestep: float
     """
 
-    def __init__(self,
-                 battery_capacity,
-                 initial_state_of_charge,
-                 max_battery_charge_per_timestep):
+    def __init__(
+        self, battery_capacity, initial_state_of_charge, max_battery_charge_per_timestep
+    ):
         self.max_battery_charge_per_timestep = max_battery_charge_per_timestep
         self.battery_capacity = battery_capacity
         self.initial_state_of_charge = initial_state_of_charge
@@ -34,8 +33,8 @@ class Battery:
         # Trim amount to the maximum charge which the battery can handle
         if amount > self.max_battery_charge_per_timestep:
             amount = self.max_battery_charge_per_timestep
-        if amount < -1*self.max_battery_charge_per_timestep:
-            amount = -1*self.max_battery_charge_per_timestep
+        if amount < -1 * self.max_battery_charge_per_timestep:
+            amount = -1 * self.max_battery_charge_per_timestep
 
         # In case battery would be "more than" fully discharged. This applies only if amount is negative
         if self.state_of_charge + amount < 0:

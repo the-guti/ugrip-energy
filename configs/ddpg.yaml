@@ -1,5 +1,5 @@
 learn:
-  total_timesteps: 500000
+  total_timesteps: 300000
 model:
   verbose: 1
   gamma: 0.95
