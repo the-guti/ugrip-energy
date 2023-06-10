@@ -1,7 +1,7 @@
-from typing import Tuple, Optional, Union, List
-import gymnasium as gym
+from typing import Tuple
+import gym
 import numpy as np
-from gymnasium.core import ActType, ObsType, RenderFrame
+from gym.core import ActType, ObsType
 from building_energy_storage_simulation.simulation import Simulation
 
 
@@ -50,23 +50,16 @@ class Environment(gym.Env):
             self.simulation.solar_generation_profile
         ), "`max_timesteps plus the forecast length cannot be greater than the length of the simulation profile."
         self.num_forecasting_steps = num_forecasting_steps
-        self.action_space = gym.spaces.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
+        self.action_space = gym.spaces.box.Box(low=-1, high=1, shape=(1,), dtype=np.float32)
         # Using np.inf as bounds as the observations must be rescaled externally anyways. E.g. Using the VecNormalize
         # wrapper from StableBaselines3
         # (see https://stable-baselines.readthedocs.io/en/master/guide/vec_envs.html#vecnormalize)
-        self.observation_space = gym.spaces.Box(
+        self.observation_space = gym.spaces.box.Box(
             shape=(self.num_forecasting_steps * 3 + 1,),
             low=-np.inf,
             high=np.inf,
-            dtype=np.float64,
+            dtype=np.float32,
         )
-        pass
-
-    def render(self) -> Optional[Union[RenderFrame, List[RenderFrame]]]:
-        """
-        Not implemented (yet).
-        """
-
         pass
 
     def reset(self) -> Tuple[ObsType, dict]:
