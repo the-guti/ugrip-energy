@@ -1,6 +1,7 @@
 .idea
 .vscode
 __pycache__
+building_energy_storage_simulation/__pycache__
 **.egg-info
 .ipynb_checkpoints
 docs

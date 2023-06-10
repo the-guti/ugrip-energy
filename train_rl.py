@@ -1,16 +1,12 @@
 import time
 import yaml
-import gymnasium
 import os
 import pandas as pd
 import argparse
 from matplotlib import pyplot as plt
-import sys
-
-sys.modules["gym"] = gymnasium
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
-from stable_baselines3 import PPO, DDPG, A2C, SAC
+from stable_baselines3 import PPO, DDPG, SAC, TD3
 from building_energy_storage_simulation import Environment
 
 # Parse command line arguments
@@ -45,12 +41,16 @@ if args.algorithm == "ppo":
     model = PPO("MlpPolicy", env, **algorithm_config["model"])
 if args.algorithm == "ddpg":
     model = DDPG("MlpPolicy", env, **algorithm_config["model"])
+if args.algorithm == "sac":
+    model = SAC("MlpPolicy", env, **algorithm_config["model"])
+if args.algorithm == "td3":
+    model = TD3("MlpPolicy", env, **algorithm_config["model"])
 
 # Train the model
 model.learn(**algorithm_config["learn"])
 
 # Save the trained model and the environment
-model.save(os.path.join(logs_path, "model"))
+model.save(os.path.join(logs_path, "model.zip"))
 env.save(os.path.join(logs_path, "env.pkl"))
 
 # Plot and save the training process
