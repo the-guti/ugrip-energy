@@ -1,0 +1,7 @@
+learn:
+  total_timesteps: 30720
+model:
+  verbose: 1
+  gamma: 0.95
+  batch_size: 2048
+  learning_rate: 0.0003

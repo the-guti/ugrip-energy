@@ -8,10 +8,11 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3 import PPO, DDPG, SAC, TD3
 from building_energy_storage_simulation import Environment
+from Algorithms.vpg_discrete import VPG as vpg
 
 # Parse command line arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--algorithm", type=str, default="ppo", help="algorithm to use for training")
+parser.add_argument("--algorithm", type=str, default="vpg", help="algorithm to use for training")
 args = parser.parse_args()
 
 # Load algorithm configuration from file
@@ -34,7 +35,7 @@ os.makedirs(logs_path, exist_ok=True)
 # Wrap the environment with Monitor for logging and DummyVecEnv for normalization
 env = Monitor(env, filename=logs_path)
 env = DummyVecEnv([lambda: env])
-env = VecNormalize(env, norm_obs=True, norm_reward=True)
+env = VecNormalize(env, norm_obs=True , norm_reward=True)
 
 # Initialize the model based on the chosen algorithm
 if args.algorithm == "ppo":
@@ -45,9 +46,12 @@ if args.algorithm == "sac":
     model = SAC("MlpPolicy", env, **algorithm_config["model"])
 if args.algorithm == "td3":
     model = TD3("MlpPolicy", env, **algorithm_config["model"])
+if args.algorithm == "vpg":
+    print("Training VPG.....")
+    model = vpg("MlpPolicy", env, algorithm_config["model"])
 
-# Train the model
-model.learn(**algorithm_config["learn"])
+# Train the model (for VPG, for other algorihms pass **algorithm_config["learn"])
+model.learn(algorithm_config["learn"])
 
 # Save the trained model and the environment
 model.save(os.path.join(logs_path, "model.zip"))
