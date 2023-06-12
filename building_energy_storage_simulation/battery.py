@@ -2,13 +2,10 @@ class Battery:
     """
     The Battery class.
 
-    :param capacity: The capacity of the battery in kWh.
-    :type capacity: float
-    :param initial_state_of_charge: The initial charging state of the battery in kWh.
-    :type initial_state_of_charge: float
-    :param max_battery_charge_per_timestep: Maximum amount of energy (kWh) which can be obtained from the battery or
-        which can be used to charge the battery in one time step.
-    :type max_battery_charge_per_timestep: float
+    Args:
+        capacity (float): The capacity of the battery in kWh.
+        initial_state_of_charge (float): The initial charging state of the battery in kWh.
+        max_battery_charge_per_timestep (float): Maximum amount of energy (kWh) which can be obtained from the battery or which can be used to charge the battery in one time step.
     """
 
     def __init__(
@@ -24,11 +21,10 @@ class Battery:
         """
         Using means charging or discharging the battery.
 
-        :param amount: Amount of energy to be stored or retrieved from the battery in kWh. Note that the amount
-            is set to the value of `max_battery_charge_per_timestep` if it exceeds it.
-        :type amount: float
-        :returns: Amount of energy consumed to charge or amount of energy gained by discharging the battery in kWh.
-        :rtype: float
+        Args:
+            amount (float): Amount of energy to be stored or retrieved from the battery in kWh. Note that the amount is set to the value of `max_battery_charge_per_timestep` if it exceeds it.
+        Returns:
+            electricity_used (float): Amount of energy consumed to charge or amount of energy gained by discharging the battery in kWh.
         """
         # Trim amount to the maximum charge which the battery can handle
         if amount > self.max_battery_charge_per_timestep:
@@ -36,7 +32,8 @@ class Battery:
         if amount < -1 * self.max_battery_charge_per_timestep:
             amount = -1 * self.max_battery_charge_per_timestep
 
-        # In case battery would be "more than" fully discharged. This applies only if amount is negative
+        # In case battery would be "more than" fully discharged.
+        # This applies only if amount is negative
         if self.state_of_charge + amount < 0:
             electricity_used = self.state_of_charge
             self.state_of_charge = 0
