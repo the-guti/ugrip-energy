@@ -6,4 +6,5 @@ building_energy_storage_simulation/__pycache__
 .ipynb_checkpoints
 docs
 rl_example
-logs
+runs
+wandb

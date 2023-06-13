@@ -1,6 +1,0 @@
-learn:
-  total_timesteps: 3000000
-model:
-  verbose: 1
-  gamma: 0.95
-  batch_size: 2048
