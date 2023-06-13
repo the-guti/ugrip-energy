@@ -5,7 +5,6 @@ import pandas as pd
 import argparse
 import torch
 import numpy as np
-from matplotlib import pyplot as plt
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3 import PPO
@@ -19,7 +18,7 @@ def main():
     parser.add_argument("--env_path", type=str, default="configs/env.yaml")
     parser.add_argument("--logs_path", type=str, default="runs/ppo/")
     parser.add_argument("--algorithm", type=str, default="ppo")
-    parser.add_argument("--total_timesteps", type=int, default=20000)
+    parser.add_argument("--total_timesteps", type=int, default=8000000)
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--learning_rate", type=float, default=0.0003)
     parser.add_argument("--n_steps", type=int, default=1024)
@@ -34,8 +33,10 @@ def main():
     args = parser.parse_args()
 
     # Set seed for reproducibility
-    torch.manual_seed(args.seed)
     np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    torch.cuda.manual_seed(args.seed)
+    torch.backends.cudnn.deterministic = True
 
     algorithm_config = {
         "learning_rate": args.learning_rate,
