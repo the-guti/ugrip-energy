@@ -5,7 +5,8 @@ class Battery:
     Args:
         capacity (float): The capacity of the battery in kWh.
         initial_state_of_charge (float): The initial charging state of the battery in kWh.
-        max_battery_charge_per_timestep (float): Maximum amount of energy (kWh) which can be obtained from the battery or which can be used to charge the battery in one time step.
+        max_battery_charge_per_timestep (float): Maximum amount of energy (kWh) which can
+            be obtained from or used to charge the battery in one time step.
     """
 
     def __init__(
@@ -22,9 +23,12 @@ class Battery:
         Using means charging or discharging the battery.
 
         Args:
-            amount (float): Amount of energy to be stored or retrieved from the battery in kWh. Note that the amount is set to the value of `max_battery_charge_per_timestep` if it exceeds it.
+            amount (float): Amount of energy to be stored or retrieved from the battery in kWh.
+                Note that the amount is set to the value of `max_battery_charge_per_timestep`
+                if it exceeds it.
         Returns:
-            electricity_used (float): Amount of energy consumed to charge or amount of energy gained by discharging the battery in kWh.
+            electricity_used (float): Amount of energy consumed to charge or amount of energy
+                gained by discharging the battery in kWh.
         """
         # Trim amount to the maximum charge which the battery can handle
         if amount > self.max_battery_charge_per_timestep:

@@ -9,7 +9,8 @@ class Building:
         solar_power_installed (float): The installed peak photovoltaic power in kWp.
         wind_power_installed (float): The installed peak wind power in kW.
         battery_capacity (float): The capacity of the battery in kWh.
-        max_battery_charge_per_timestep (float): Maximum amount of energy (kWh) which can be obtained from the battery or which can be used to charge the battery in one time step.
+        max_battery_charge_per_timestep (float): Maximum amount of energy (kWh) which
+            can be obtained from or used to charge the battery in one time step.
     """
 
     def __init__(
@@ -31,6 +32,6 @@ class Building:
 
     def reset(self):
         """
-        Resetting the state of the battery by calling `reset()` method from the battery class.
+        Resetting the state of the battery by calling `reset()` from the battery.
         """
         self.battery.reset()
