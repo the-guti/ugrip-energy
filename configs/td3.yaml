@@ -1,5 +1,6 @@
 name: ugrip-energy-td3
-program: train_td3.py
+project: ugrip-energy
+program: train_scripts/td3.py
 method: bayes
 metric:
   goal: maximize

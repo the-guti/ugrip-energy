@@ -1,5 +1,6 @@
 name: ugrip-energy-ddpg
-program: train_ddpg.py
+project: ugrip-energy
+program: train_scripts/ddpg.py
 method: bayes
 metric:
   goal: maximize

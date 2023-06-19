@@ -1,5 +1,6 @@
 name: ugrip-energy-ppo
-program: train_ppo.py
+project: ugrip-energy
+program: train_scripts/ppo.py
 method: bayes
 metric:
   goal: maximize

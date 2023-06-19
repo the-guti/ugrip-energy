@@ -1,7 +1,21 @@
-learn:
-  total_timesteps: 30720
-model:
-  verbose: 1
-  gamma: 0.95
-  batch_size: 2048
-  learning_rate: 0.0003
+name: ugrip-energy-vpg
+project: ugrip-energy
+program: train_scripts/vpg.py
+method: bayes
+metric:
+  goal: maximize
+  name: rollout/ep_rew_mean
+parameters:
+  learning_rate:
+    min: 0.0001
+    max: 0.001
+  gamma:
+    min: 0.9
+    max: 0.99
+  vf_coef:
+    min: 0.3
+    max: 0.6
+  qf_nns:
+    values: [64, 128, 256, 512]
+  pi_nns:
+    values: [64, 128, 256, 512]

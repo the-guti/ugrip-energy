@@ -1,8 +1,8 @@
 import time
 import os
 import argparse
-from utils import set_seed, make_env
-from stable_baselines3 import PPO
+from train_scripts.utils import set_seed, make_env
+from stable_baselines3 import DDPG
 import wandb
 from wandb.integration.sb3 import WandbCallback
 
@@ -10,19 +10,15 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--env_path", type=str, default="configs/env.yaml")
-    parser.add_argument("--logs_path", type=str, default="runs/ppo/")
-    parser.add_argument("--algorithm", type=str, default="ppo")
+    parser.add_argument("--logs_path", type=str, default="runs/ddpg/")
+    parser.add_argument("--algorithm", type=str, default="ddpg")
     parser.add_argument("--total_timesteps", type=int, default=8000000)
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--learning_rate", type=float, default=0.0003)
-    parser.add_argument("--n_steps", type=int, default=2048)
     parser.add_argument("--batch_size", type=int, default=2048)
-    parser.add_argument("--n_epochs", type=int, default=10)
     parser.add_argument("--gamma", type=float, default=0.95)
-    parser.add_argument("--clip_range", type=float, default=0.2)
-    parser.add_argument("--use_sde", type=bool, default=False)
-    parser.add_argument("--sde_sample_freq", type=int, default=-1)
-    parser.add_argument("--vf_nns", type=int, default=128)
+    parser.add_argument("--tau", type=float, default=0.005)
+    parser.add_argument("--qf_nns", type=int, default=128)
     parser.add_argument("--pi_nns", type=int, default=128)
     args = parser.parse_args()
 
@@ -31,17 +27,13 @@ def main():
 
     algorithm_config = {
         "learning_rate": args.learning_rate,
-        "n_steps": args.n_steps,
         "batch_size": args.batch_size,
-        "n_epochs": args.n_epochs,
         "gamma": args.gamma,
-        "clip_range": args.clip_range,
-        "use_sde": args.use_sde,
-        "sde_sample_freq": args.sde_sample_freq,
+        "tau": args.tau,
         "policy_kwargs": {
             "net_arch": {
                 "pi": [args.pi_nns, 2 * args.pi_nns],
-                "vf": [args.vf_nns, 2 * args.vf_nns],
+                "qf": [args.qf_nns, 2 * args.qf_nns],
             }
         },
         "verbose": 1,
@@ -69,7 +61,7 @@ def main():
         os.makedirs(logs_path, exist_ok=True)
 
         # Initialize the model
-        model = PPO("MlpPolicy", env, **algorithm_config, tensorboard_log=logs_path)
+        model = DDPG("MlpPolicy", env, **algorithm_config, tensorboard_log=logs_path)
 
         # Train the model
         model.learn(
