@@ -33,7 +33,7 @@ wandb login
 wandb sweep configs/algorithm.yaml
 wandb agent username/ugrip-energy/sweep_id
 ```
-3. Use the provided training scripts in the `train_scripts` folder to train an RL algorithm.
+3. Or use the provided training scripts in the `train_scripts` folder to train an RL algorithm.
 ```
 python train_scripts/algorithm.py
 ```
