@@ -1,3 +1,4 @@
+torch
 pandas
 numpy
 gymnasium
@@ -7,3 +8,7 @@ git+https://github.com/carlosluis/stable-baselines3@fix_tests
 pyyaml
 tensorboard
 wandb
+gekko
+PyYAML
+pandas
+matplotlib
