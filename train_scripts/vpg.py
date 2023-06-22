@@ -1,7 +1,7 @@
 import time
 import os
 import argparse
-from train_scripts.utils import set_seed, make_env
+from utils import set_seed, make_env
 from stable_baselines3_vpg.vpg import VPG
 import wandb
 from wandb.integration.sb3 import WandbCallback
@@ -16,10 +16,10 @@ def main():
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--learning_rate", type=float, default=0.0001)
     parser.add_argument("--n_steps", type=int, default=20)
-    parser.add_argument("--gamma", type=float, default=0.99)
+    parser.add_argument("--gamma", type=float, default=0.95)
     parser.add_argument("--vf_coef", type=float, default=0.5)
-    parser.add_argument("--qf_nns", type=int, default=128)
-    parser.add_argument("--pi_nns", type=int, default=128)
+    parser.add_argument("--qf_nns", type=int, default=256)
+    parser.add_argument("--pi_nns", type=int, default=512)
     args = parser.parse_args()
 
     # Set seed for reproducibility
