@@ -1,7 +1,7 @@
 import time
 import os
 import argparse
-from train_scripts.utils import set_seed, make_env
+from utils import set_seed, make_env
 from stable_baselines3 import TD3
 import wandb
 from wandb.integration.sb3 import WandbCallback
