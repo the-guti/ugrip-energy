@@ -6,6 +6,7 @@ from stable_baselines3_vpg.vpg import VPG
 import wandb
 from wandb.integration.sb3 import WandbCallback
 
+
 def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser()
