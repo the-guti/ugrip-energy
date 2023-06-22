@@ -1,0 +1,24 @@
+name: ugrip-energy-sac
+project: ugrip-energy
+program: train_scripts/sac.py
+method: bayes
+metric:
+  goal: maximize
+  name: rollout/ep_rew_mean
+parameters:
+  learning_rate:
+    min: 0.0003
+    max: 0.003
+  gamma:
+    min: 0.9
+    max: 0.99
+  tau:
+    min: 0.001
+    max: 0.01
+  qf_nns:
+    values: [64, 128, 256, 512]
+  pi_nns:
+    values: [64, 128, 256, 512]
+  
+
+ 
