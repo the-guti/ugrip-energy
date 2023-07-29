@@ -8,3 +8,4 @@ docs
 rl_example
 runs
 wandb
+*logs

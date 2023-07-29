@@ -5,6 +5,7 @@ from utils import set_seed, make_env
 from stable_baselines3 import TD3
 import wandb
 from wandb.integration.sb3 import WandbCallback
+from stable_baselines3.common.logger import configure
 
 def main():
     # Parse command line arguments
@@ -64,6 +65,10 @@ def main():
 
         # Initialize the model
         model = TD3("MlpPolicy", env, **algorithm_config, tensorboard_log=logs_path)
+
+        # Setup a custom logger
+        custom_logger = configure(logs_path, ["stdout", "csv", "tensorboard"])
+        model.set_logger(custom_logger)
 
         # Train the model
         model.learn(

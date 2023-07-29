@@ -5,6 +5,8 @@ from utils import set_seed, make_env
 from stable_baselines3 import PPO
 import wandb
 from wandb.integration.sb3 import WandbCallback
+from stable_baselines3.common.logger import configure
+from stable_baselines3.common.logger import configure
 
 def main():
     # Parse command line arguments
@@ -14,7 +16,7 @@ def main():
     parser.add_argument("--algorithm", type=str, default="ppo")
     parser.add_argument("--total_timesteps", type=int, default=8000000)
     parser.add_argument("--seed", type=int, default=1337)
-    parser.add_argument("--learning_rate", type=float, default=0.0003)
+    parser.add_argument("-lr¨","--learning_rate",  type=float, default=0.0003)
     parser.add_argument("--n_steps", type=int, default=2048)
     parser.add_argument("--batch_size", type=int, default=2048)
     parser.add_argument("--n_epochs", type=int, default=10)
@@ -70,6 +72,10 @@ def main():
 
         # Initialize the model
         model = PPO("MlpPolicy", env, **algorithm_config, tensorboard_log=logs_path)
+
+        # Setup a custom logger
+        custom_logger = configure(logs_path, ["stdout", "csv", "tensorboard"])
+        model.set_logger(custom_logger)
 
         # Train the model
         model.learn(
