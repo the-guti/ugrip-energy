@@ -6,6 +6,8 @@ from stable_baselines3 import SAC
 import wandb
 from wandb.integration.sb3 import WandbCallback
 from stable_baselines3.common.logger import configure
+from rolloutCallBack import RollOutCallBack
+from stable_baselines3.common.callbacks import CallbackList
 
 def main():
     # Parse command line arguments
@@ -13,11 +15,11 @@ def main():
     parser.add_argument("--env_path", type=str, default="configs/env.yaml")
     parser.add_argument("--logs_path", type=str, default="runs/sac/")
     parser.add_argument("--algorithm", type=str, default="sac")
-    parser.add_argument("--total_timesteps", type=int, default=5000000)
+    parser.add_argument("--total_timesteps", type=int, default=1000000)
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--learning_rate", type=float, default=0.0003)
-    parser.add_argument("--batch_size", type=int, default=2048)
-    parser.add_argument("--gamma", type=float, default=0.95)
+    parser.add_argument("--batch_size", type=int, default=120)
+    parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--tau", type=float, default=0.005)
     parser.add_argument("--qf_nns", type=int, default=128)
     parser.add_argument("--pi_nns", type=int, default=128)
@@ -68,10 +70,13 @@ def main():
         custom_logger = configure(logs_path, ["stdout", "csv", "tensorboard"])
         model.set_logger(custom_logger)
 
+        #Callback List 
+        callback_list = CallbackList([WandbCallback(), RollOutCallBack()])
+
         # Train the model
         model.learn(
             total_timesteps=args.total_timesteps,
-            callback=WandbCallback()
+            callback=callback_list
         )
 
         # Save the environment and the model

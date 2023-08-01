@@ -41,6 +41,7 @@ def make_env(env_path, dataset):
     # Load environment configuration from file
     with open(env_path, "r") as f:
         env_config = yaml.safe_load(f)
+    print(env_config)
 
     # Initialize the environment
     env = Environment(dataset=dataset, **env_config)

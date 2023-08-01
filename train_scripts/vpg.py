@@ -6,6 +6,8 @@ from stable_baselines3_vpg.vpg import VPG
 import wandb
 from wandb.integration.sb3 import WandbCallback
 from stable_baselines3.common.logger import configure
+from rolloutCallBack import RollOutCallBack
+from stable_baselines3.common.callbacks import CallbackList
 
 
 def main():
@@ -14,11 +16,11 @@ def main():
     parser.add_argument("--env_path", type=str, default="configs/env.yaml")
     parser.add_argument("--logs_path", type=str, default="runs/vpg/")
     parser.add_argument("--algorithm", type=str, default="vpg")
-    parser.add_argument("--total_timesteps", type=int, default=5000000)
+    parser.add_argument("--total_timesteps", type=int, default=1000000)
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--learning_rate", type=float, default=0.0001)
-    parser.add_argument("--n_steps", type=int, default=20)
-    parser.add_argument("--gamma", type=float, default=0.95)
+    parser.add_argument("--n_steps", type=int, default=120)
+    parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--vf_coef", type=float, default=0.5)
     parser.add_argument("--qf_nns", type=int, default=256)
     parser.add_argument("--pi_nns", type=int, default=512)
@@ -69,10 +71,13 @@ def main():
         custom_logger = configure(logs_path, ["stdout", "csv", "tensorboard"])
         model.set_logger(custom_logger)
 
+        #Callback List 
+        callback_list = CallbackList([WandbCallback(), RollOutCallBack()])
+
         # Train the model
         model.learn(
             total_timesteps=args.total_timesteps,
-            callback=WandbCallback()
+            callback=callback_list
         )
 
         # Save the environment and the model

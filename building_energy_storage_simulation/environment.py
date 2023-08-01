@@ -53,6 +53,7 @@ class Environment(gym.Env):
         noise_influence,
         emissions_per_kwh,
         lambda_co2,
+        max_timesteps
     ):
 
         self.simulation = Simulation(
@@ -68,7 +69,7 @@ class Environment(gym.Env):
         # the simulation will run for the length of the dataset minus
         # the number of forecasting steps minus one
         num_rows = len(self.simulation.electricity_load_profile)
-        self.max_timesteps = num_rows - num_forecasting_steps - 1
+        self.max_timesteps = max_timesteps
         self.num_forecasting_steps = num_forecasting_steps
         self.noise_influence = noise_influence
         self.emissions_per_kwh = emissions_per_kwh
@@ -113,7 +114,7 @@ class Environment(gym.Env):
                 which can be used to charge the battery per time step.
         Returns:
             Tuple of:
-                1. observation.
+                1. observation. 
                 2. reward.
                 3. terminated. If true, the episode is over.
                 4. truncated. Is always false, it is not implemented yet.
@@ -153,7 +154,7 @@ class Environment(gym.Env):
         """
         Returns true if the simulation is terminated, false otherwise.
         """
-        if self.simulation.step_count > self.max_timesteps:
+        if self.simulation.step_count >= self.max_timesteps:
             return True
         return False
 
