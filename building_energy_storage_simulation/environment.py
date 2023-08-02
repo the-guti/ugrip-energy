@@ -235,7 +235,16 @@ class Environment(gym.Env):
         """
         Calculates the reward for the current time step.
         """
-        return (
-            - self.lambda_co2 * (cost_of_external_generator - revenue_from_excess_energy)
-            - (1 - self.lambda_co2) * electricity_consumption * self.emissions_per_kwh
-        )
+        if self.simulation.step_count >= self.max_timesteps - 1 :
+            return (
+                - self.lambda_co2 * (cost_of_external_generator - revenue_from_excess_energy)
+                - (1 - self.lambda_co2) * electricity_consumption * self.emissions_per_kwh + self.simulation.building.battery.state_of_charge * \
+                self.simulation.electricity_load_profile[self.simulation.start_index + self.simulation.step_count] * \
+                    self.simulation.external_generation_profile[self.simulation.start_index + self.simulation.step_count] * \
+                    self.simulation.sell_back_price_rate
+            )
+        else: 
+            return (
+                - self.lambda_co2 * (cost_of_external_generator - revenue_from_excess_energy)
+                - (1 - self.lambda_co2) * electricity_consumption * self.emissions_per_kwh 
+            )

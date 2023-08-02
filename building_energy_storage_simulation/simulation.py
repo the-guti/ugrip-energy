@@ -143,3 +143,4 @@ class Simulation:
             cost_of_external_generator,
             revenue_from_excess_energy,
         )
+    
