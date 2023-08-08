@@ -12,13 +12,13 @@ from simple_slurm import Slurm
 #     qos='cpu-4',
 #     partition='cpu',
 #     job_name='BCTE',
-#     output=f'./logs/{Slurm.JOB_ARRAY_MASTER_ID}_{Slurm.JOB_ARRAY_ID}.out',
-#     error=f'./logs/{Slurm.JOB_ARRAY_MASTER_ID}_{Slurm.JOB_ARRAY_ID}.err',
+#     output=f'./slurm_logs/{Slurm.JOB_ARRAY_MASTER_ID}_{Slurm.JOB_ARRAY_ID}.out',
+#     error=f'./slurm_logs/{Slurm.JOB_ARRAY_MASTER_ID}_{Slurm.JOB_ARRAY_ID}.err',
 #     time=datetime.timedelta(days=0, hours=12, minutes=0, seconds=0),
 # )
 
 slurm = Slurm(
-    cpus_per_task=8,
+    cpus_per_task=16,
     mem='40G',
     gres='gpu:1',
     qos='gpu-8',
@@ -37,7 +37,7 @@ experiments = [
         "algo": "ppo",
         "total_timesteps": 3000000,
         "clip_range":0.1304,
-        "gamma":0.915,
+        "gamma":0.98,
         "lr":0.0003854,
         "pi_nns":64,
         "vf_nns":256,
@@ -45,7 +45,7 @@ experiments = [
     {
         "algo": "td3",
         "total_timesteps": 3000000,
-        "gamma":0.948,
+        "gamma":0.98,
         "lr":0.00278,
         "pi_nns":64,
         "qf_nns":512,
@@ -55,7 +55,7 @@ experiments = [
     {
         "algo": "ddpg",
         "total_timesteps": 3000000,
-        "gamma":0.9821,
+        "gamma":0.98,
         "lr":0.001024,
         "qf_nns":512,
         "pi_nns":256,
@@ -64,18 +64,18 @@ experiments = [
     {
         "algo": "a2c",
         "total_timesteps": 3000000,
-        "gamma":0.9459,
+        "gamma":0.98,
         "lr":0.001893,
         "pi_nns":64,
         "qf_nns":512,
         "vf_coef":0.433,
     },
-    {
-        "algo": "sac",
-    },
-    {
-        "algo": "vpg",
-    }
+    # {
+    #     "algo": "sac",
+    # },
+    # {
+    #     "algo": "vpg",
+    # }
 ]
 
 for exp in experiments:
@@ -92,7 +92,7 @@ for exp in experiments:
 
         elif exp['algo'] == "td3":
 
-            slurm.sbatch(f"python ./train_scripts/td3.py --gamma {exp['gamma']} --learning_rate {exp['lr']} --pi_nns {exp['pi_nns']} --qf_nns {exp['qf_nns']} --tau {exp['tau']}")
+            slurm.sbatch(f"python ./train_scripts/td3.py --total_timesteps {exp['total_timesteps']} --gamma {exp['gamma']} --learning_rate {exp['lr']} --pi_nns {exp['pi_nns']} --qf_nns {exp['qf_nns']} --tau {exp['tau']}")
 
         elif exp['algo'] == "ddpg":
 
@@ -114,6 +114,6 @@ for exp in experiments:
 
         print("An exception occurred")
                 
-    time.sleep(np.random.randint(1, 10))
+    time.sleep(np.random.randint(1, 5))
 
 print(f"Finished!")

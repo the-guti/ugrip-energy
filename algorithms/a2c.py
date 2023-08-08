@@ -60,7 +60,7 @@ class A2C:
         self.learning_rate = 0.0003
         self.linspace = np.linspace(-0.99, 0.99, 50)
         torch.manual_seed(42)
-        wandb.init(project="A2C", entity="rozlvet66")
+        wandb.init(project="ugrip", entity="optimllab")
 
     def create_model(self) -> nn.Module:
         if isinstance(self.environment.observation_space, gym.spaces.Discrete):

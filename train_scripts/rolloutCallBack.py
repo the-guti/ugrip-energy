@@ -9,7 +9,7 @@ class RollOutCallBack(BaseCallback):
         envs = self.training_env.envs
         for env in envs: 
             env.env.simulation.start_index = random.randint(0, 17520 - 130)
-            env.env.simulation.initial_state_of_charge = random.uniform(-1, 1)
+            env.env.simulation.initial_state_of_charge = random.uniform(0, 1)
         print("Env specs: ", f"start_index:{envs[0].env.simulation.start_index}", "\n\n")
         print("Env specs: ", f"initial_state_of_charge:{envs[0].env.simulation.initial_state_of_charge}", "\n\n")
 

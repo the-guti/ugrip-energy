@@ -17,11 +17,11 @@ def main():
     parser.add_argument("--logs_path", type=str, default="runs/ppo/")
     parser.add_argument("--algorithm", type=str, default="ppo")
     parser.add_argument("--total_timesteps", type=int, default=1000000)
-    parser.add_argument("--seed", type=int, default=1337)
+    parser.add_argument("--seed", type=int, default=8)
     parser.add_argument("-lr¨","--learning_rate",  type=float, default=0.0003)
     parser.add_argument("--n_steps", type=int, default=120)
     parser.add_argument("--batch_size", type=int, default=120)
-    parser.add_argument("--n_epochs", type=int, default=10)
+    parser.add_argument("--n_epochs", type=int, default=1)
     parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--clip_range", type=float, default=0.2)
     parser.add_argument("--use_sde", type=bool, default=False)
@@ -56,7 +56,8 @@ def main():
 
     # Initialize WandB
     with wandb.init(
-        project="ugrip-energy",
+        project="ugrip",
+        entity="optimllab",
         config={
             "algorithm": args.algorithm,
             "total_timesteps": args.total_timesteps,
