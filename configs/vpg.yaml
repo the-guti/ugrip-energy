@@ -1,5 +1,6 @@
-name: ugrip-energy-vpg
-project: ugrip-energy
+name: ugrip-vpg
+project: ugrip
+entity: optimllab
 program: train_scripts/vpg.py
 method: bayes
 metric:

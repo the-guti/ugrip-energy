@@ -1,5 +1,6 @@
 name: ugrip-energy-a2c
-project: ugrip-energy
+project: ugrip
+entity: optimllab
 program: train_scripts/a2c.py
 method: bayes
 metric:

@@ -1,5 +1,6 @@
 name: ugrip-energy-td3
-project: ugrip-energy
+project: ugrip
+entity: optimllab
 program: train_scripts/td3.py
 method: bayes
 metric:

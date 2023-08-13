@@ -1,5 +1,6 @@
 name: ugrip-energy-ppo
-project: ugrip-energy
+project: ugrip
+entity: optimllab
 program: train_scripts/ppo.py
 method: bayes
 metric:

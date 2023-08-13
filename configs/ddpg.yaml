@@ -1,5 +1,6 @@
 name: ugrip-energy-ddpg
-project: ugrip-energy
+project: ugrip
+entity: optimllab
 program: train_scripts/ddpg.py
 method: bayes
 metric:
