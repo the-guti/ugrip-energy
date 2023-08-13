@@ -18,7 +18,7 @@ parser.add_argument("--env_path", type=str, default="/workspace/UGRIP-ExtraTime/
 parser.add_argument("--logs_path", type=str, default="/workspace/UGRIP-ExtraTime/runs/vpg_discrete/")
 parser.add_argument("--algorithm", type=str, default="vpg")
 parser.add_argument("--total_timesteps", type=int, default=5000000)
-parser.add_argument("--seed", type=int, default=8)
+parser.add_argument("--seed", type=int, default=0)
 parser.add_argument("--learning_rate", type=float, default=0.0001)
 parser.add_argument("--gamma", type=float, default=0.95)
 parser.add_argument("--entropy_coef", type=float, default=0.5)
