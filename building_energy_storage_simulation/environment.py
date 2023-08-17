@@ -2,7 +2,7 @@ from typing import Tuple
 import gym
 import numpy as np
 from gym.core import ActType, ObsType
-from building_energy_storage_simulation.simulation import Simulation
+from simulation import Simulation
 
 
 class Environment(gym.Env):
@@ -136,9 +136,9 @@ class Environment(gym.Env):
             revenue_from_excess_energy,
             electricity_consumption,
         )
-        observation = self.get_observation()
+        # observation = self.get_observation()
         return (
-            observation,
+            # observation,
             reward,
             self.get_terminated(),
             False,
@@ -235,6 +235,8 @@ class Environment(gym.Env):
         Calculates the reward for the current time step.
         """
         return (
-            - self.lambda_co2 * (cost_of_external_generator - revenue_from_excess_energy)
-            - (1 - self.lambda_co2) * electricity_consumption * self.emissions_per_kwh
+            #!
+            # - self.lambda_co2 * (cost_of_external_generator - revenue_from_excess_energy)
+            # - (1 - self.lambda_co2) * electricity_consumption * self.emissions_per_kwh
+            (cost_of_external_generator - revenue_from_excess_energy)
         )

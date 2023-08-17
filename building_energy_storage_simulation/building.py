@@ -1,4 +1,4 @@
-from building_energy_storage_simulation.battery import Battery
+from battery import Battery
 
 
 class Building:

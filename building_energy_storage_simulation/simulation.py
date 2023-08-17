@@ -1,5 +1,5 @@
-from building_energy_storage_simulation.building import Building
-from building_energy_storage_simulation.utils import load_profile
+from building import Building
+from utils import load_profile
 
 
 class Simulation:
@@ -8,7 +8,7 @@ class Simulation:
     generation profiles together.
 
     Args:
-        dataset (str): Path to csv file containing electricity load, solar generation, wind 
+        dataset (str): Path to csv file containing electricity load, solar generation, wind
             generation profiles, external generation cost, and the month and day type of each.
         battery_capacity (float): The capacity of the battery in kWh.
         initial_state_of_charge (float): The initial state of charge of the battery in kWh.
@@ -98,7 +98,7 @@ class Simulation:
                 3. Cost of using external generator.
                 4. Revenue from selling excess energy.
         """
-        
+
         electricity_load_of_this_timestep = self.electricity_load_profile[
             self.start_index + self.step_count
         ]
@@ -136,6 +136,7 @@ class Simulation:
             cost_of_external_generator = (
                 external_generation_cost_of_this_timestep * external_generator_energy
             )
+
         self.step_count += 1
         return (
             electricity_consumption,

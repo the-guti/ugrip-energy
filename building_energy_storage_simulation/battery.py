@@ -39,7 +39,7 @@ class Battery:
         # In case battery would be "more than" fully discharged.
         # This applies only if amount is negative
         if self.state_of_charge + amount < 0:
-            electricity_used = self.state_of_charge
+            electricity_used = -self.state_of_charge
             self.state_of_charge = 0
         # In case the battery would be "more than" fully charged.
         # This applies only to the case where amount is positive
