@@ -57,11 +57,11 @@ class Simulation:
         ), "All dataset columns must be of the same length."
         # Solar Generation Profile is in W per 1KW of Solar power installed
         self.solar_generation_profile = (
-            self.solar_generation_profile * self.building.solar_power_installed / 1000
+            self.solar_generation_profile * self.building.solar_power_installed
         )
         # Wind Generation Profile is in W per 1KW of Wind power installed
         self.wind_generation_profile = (
-            self.wind_generation_profile * self.building.wind_power_installed / 1000
+            self.wind_generation_profile * self.building.wind_power_installed
         )
         self.step_count = 0
         self.start_index = 0

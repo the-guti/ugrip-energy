@@ -70,12 +70,24 @@ experiments = [
         "qf_nns":512,
         "vf_coef":0.433,
     },
-    # {
-    #     "algo": "sac",
-    # },
-    # {
-    #     "algo": "vpg",
-    # }
+    {
+        "algo": "sac",
+        "total_timesteps": 1000,
+        "gamma": 0.9412189593650244,
+        "learning_rate": 0.0013802854250644192,
+        "pi_nns": 256,
+        "qf_nns": 512,
+        "tau": 0.009534582024354189
+    },
+    {
+        "algo": "vpg",
+        "total_timesteps": 1000,
+        "gamma": 0.907324031158891,
+        "learning_rate": 0.0001442793121155916,
+        "pi_nns": 64,
+        "qf_nns": 512,
+        "vf_coef": 0.5981429480458136
+    }
 ]
 
 for exp in experiments:

@@ -9,3 +9,7 @@ rl_example
 runs
 wandb
 *logs
+*.jpg
+*.png
+*.pkl
+datasets/*.csv

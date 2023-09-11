@@ -71,6 +71,7 @@ def main():
         custom_logger = configure(logs_path, ["stdout", "csv", "tensorboard"])
         model.set_logger(custom_logger)
 
+
         #Callback List 
         callback_list = CallbackList([WandbCallback(), RollOutCallBack()])
 

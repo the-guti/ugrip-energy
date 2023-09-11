@@ -15,4 +15,7 @@ class RollOutCallBack(BaseCallback):
 
     
     def _on_step(self) -> bool:
+
+        print(self.num_timesteps)
+
         return True 

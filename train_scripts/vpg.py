@@ -81,6 +81,8 @@ def main():
             callback=callback_list
         )
 
+        
+
         # Save the environment and the model
         model.save(logs_path + "model")
         env.save(logs_path + "env.pkl")
